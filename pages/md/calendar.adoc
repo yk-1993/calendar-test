@@ -1,0 +1,158 @@
+= Calendarライブラリの機能差異調査
+write Date:2023/02/15 
+
+== Googleカレンダーの主機能
+
+まずはGoogleカレンダーの主機能を書き出し、link:https://fullcalendar.io/[FullCalendar]と、link:https://jquense.github.io/react-big-calendar/examples/?path=/docs/about-big-calendar--page[React-big-calendar]がそれらの機能を備えているかを主に調査しました。
+
+== 要約
+
+Googleカレンダーの機能をベースに比較すると、react-big-calendarには年表示やドラッグ機能が無いということがわかりました。
+
+- ただしこれらはカスタマイズで時間をかければ実装自体は不可能ではないと思います。
+
+- 日/週/月スケジュールタイムラインの表示切替はどちらも可能
+- #日付や時間、イベント押下時以降の処理は、両者ともに独自実装が必要#
+.. Googleカレンダーでいうところの予定・タスク・リマインダータブなどのイベント追加表示ポップアップの部分
+
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\google_tab.jpg[width=30%]
+
+.. 「月」表示でイベントを押下したときのイベント詳細ポップアップと以降の処理
+
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\schedule_detail.jpg[width=50%]
+
+
+. イベントのドラッグアンドドロップ機能はデフォルトではreact-big-calendarにはなく、別ライブラリと併せれば実装できそうです。
+
+結論としては、両者ともに日付や時間、イベント押下時のポップアップ表示以降の処理は独自実装が必要で、
+それ以外のガワの部分は、react-big-calendarでは年表示とイベントのドラッグアンドドロップ機能がデフォルトでは無かったです。
+
+※以下は上記要約の詳細になります。
+
+<<<
+== カレンダー表示機能
+
+- 日/月/週/年の切替表示（画像は省略）
+- スケジュールのみのタイムライン表示▼
+
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\1.jpg[width=75%]
+- また、「月」表示時に各スケジュールを押下すると、詳細情報が表示され、下記機能を利用できる
+
+. 編集
+.. スケジュール編集ページに遷移し、スケジュール情報を編集できる
+. 削除
+. メールで共有
+. 三点リーダ
+.. 印刷
+.. 複製
+.. 予定を公開
+.. 主催者を変更
+
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\schedule_detail.jpg[width=75%]
+<<<
+
+== スケジュール・イベント機能
+=== 日・週・月の表示
+. カレンダー上の時間を押下でイベントを追加するポップアップが表示される
+- 4つのタブが表示される。タイトルを入力して、それぞれ予定・タスク・リマインダーを追加することができる
+- 追加した予定・タスク・リマインダーはカレンダーに反映される
+
+※画像は「日」の表示です
+
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\google_day.jpg[width=75%]
+
+- 各イベントはドラッグアンドドロップで直感的に日付の調整ができる
+
+<<<
+
+=== 年の表示
+. カレンダー上の日付を押下すると、その日の予定やタスク一覧情報が表示される
+- さらに各イベントを押下すると、詳細情報が表示される
+
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\google_year.jpg[width=75%]
+
+<<<
+
+=== スケジュール（タイムライン）表示
+. 各イベントを押下すると、詳細情報が表示される
+- 右上の三点リーダからは、印刷・複製ができる
+
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\google_schedule.jpg[width=75%]
+
+<<<
+
+==== タブ
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\google_tab.jpg[width=75%]
+===== 予定
+. 日時変更（時計アイコン）
+- ここからでも時間が変更できる
+. ゲストを追加
+. GoogleMeetのビデオ会議を追加
+. 場所を追加
+- 説明・添付ファイルを追加できる
+.. ファイルを追加の場合、GoogleDriveが立ち上がりそこから追加できる
+. ユーザー名
+- 通知の追加やデフォルトの公開設定を設定できる
+
+===== タスク
+. 日時変更（時計アイコン）
+. 説明の追加
+
+===== リマインダー
+. 日時変更（時計アイコン）
+- 繰り返し設定
+
+===== 予約スケジュール
+. プレミアム機能
+
+<<<
+
+== FullCalendarとReact-big-calendarライブラリの機能差異比較
+
+本題です。上述したGoogleカレンダーの機能がFullCalendarやReact-big-calendarに備わっているかどうか？カスタマイズで実装できそうか？を調査しました。
+
+== カレンダー表示機能
+=== FullCalendar
+- 日/月/週/年の切替表示（※画像は省略）
+- スケジュールのみのタイムライン表示▼
+
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\full_timeline.jpg[width=75%]
+
+いずれも初期機能として備わっています。
+
+<<<
+
+=== React-big-calendar
+- 日/月/週の切替表示（※画像は省略）
+- #年の表示が無い#
+- スケジュールのみのタイムライン表示▼
+
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\big_timeline.jpg[width=75%]
+
+- 以上のことから、React-big-calendarには年表示が無いことがわかりました。
+. ただし、カスタマイズ次第で実装自体はできそうです。link:https://codesandbox.io/s/jjmky5047y[DEMO]
+
+<<<
+
+== スケジュール・イベント機能
+=== FullCalendar
+- Googleカレンダーの場合、各日付や時間を押下するとイベントの追加ポップアップが表示されるが、*FullCalendarライブラリはデフォルトでそのような機能は無く、タイトルのみを追加してイベントを追加する機能のみでした*。
+- 基本的にはGoogleカレンダーの日付や時間押下時以降の処理はカスタマイズして独自実装する必要があります(もちろん日付やスケジュール押下時のコールバック関数は備わっています)
+
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\full_popup.jpg[width=75%]
+
+==== イベントのドラッグアンドドロップ機能
+- 各イベントをドラッグアンドドロップで直感的に日時調整が可能。
+
+<<<
+
+=== React-big-calendar
+- こちらも同様、日付や時間を押下するとタイトルを入力するアラートが表示され、入力するとイベントが追加される機能のみがあります。
+- FullCalendar同様にイベントを押下したときの処理はありませんので、独自実装が必要です。
+
+image::/C:\Users\litbu\OneDrive\デスクトップ\dev\calendar-test\pages\md\images\big_schedule.jpg[width=75%]
+
+==== イベントのドラッグアンドドロップ機能
+- こちらは実装自体はできますが、別のライブラリが必要でした。
+
+<<<
