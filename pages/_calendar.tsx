@@ -56,9 +56,10 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events }) => (
         views={["month", "week", "day"]}
         toolbar
         formats={{
-          dayFormat: "ddd",
+          dayFormat: "d",
           weekdayFormat: "ddd",
           dayHeaderFormat: "M月 D日 (ddd)",
+          monthHeaderFormat: "YYYY年 M月"
         }}
         messages={messages}
         onSelectEvent={(e)=> handleSelectEvent(e)} // 選択されたイベントの情報をアラートで表示
@@ -80,6 +81,17 @@ font-family: Roboto,Arial,sans-serif;
   text-align: center;
 }
 .rbc-header {
+  font-weight: normal;
+  padding-top:0.5rem;
   border-bottom:none;
+  font-size:0.8rem;
+}
+// イベント
+.rbc-event, .rbc-day-slot .rbc-background-event {
+    padding: 5px;
+    font-size: 0.8rem;
+}
+.rbc-toolbar-label {
+  font-size:1.5rem;
 }
 `;
