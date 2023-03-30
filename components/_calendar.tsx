@@ -59,11 +59,13 @@ const MyCalendar: React.FC = () => {
   const [editMeetingDescription, setEditMeetingDescription] = useState<string>("");
   const [editMeetingLocation, setEditMeetingLocation] = useState<string>("");
 
-  const handleEventDrop = (event) => {
-    const { event: updatedEvent, start, end } = event;
+  const handleEventDrop = (event:  EventInteractionArgs<object>) => {
+    console.log(event)
+    const { event: eventObject, start, end } = event;
+    const updatedEvent = eventObject as EventType;
     // イベントの新しい開始日時と終了日時を設定します
-    updatedEvent.start = start;
-    updatedEvent.end = end;
+    updatedEvent.start = start as Date;
+    updatedEvent.end = end as Date;
   
     // ここで、更新されたイベントをサーバーに送信して保存する処理を実装できます
   };
