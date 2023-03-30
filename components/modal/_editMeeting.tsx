@@ -1,11 +1,12 @@
 import { Modal, ModalContent, Button, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Text } from '@chakra-ui/react';
 import { EventType } from '../../utils/constants';
+import type { DateTimeFormatOptions } from 'intl';
 
 type EditMeetingType = EventType & {
     isOpen: boolean;
     onClose: () => void;
 }
-const options = {
+const options: DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -14,6 +15,7 @@ const options = {
     second: 'numeric',
     weekday: 'short',
   };
+  
 const EditMeeting:React.FC<EditMeetingType> = (props) => {
     const { isOpen, onClose, start, end, id, user, location, guests, description } = props;
 return(
