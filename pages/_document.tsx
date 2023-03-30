@@ -5,7 +5,7 @@ import createEmotionServer from "@emotion/server/create-instance";
 import createCache from "@emotion/cache";
 
 export default class MyDocument extends Document {
-  static async getInitialProps(ctx) {
+  static async getInitialProps(ctx:any) {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
     const cache = createCache({ key: "css" });
@@ -14,7 +14,7 @@ export default class MyDocument extends Document {
     try {
       ctx.renderPage = () =>
         originalRenderPage({
-          enhanceApp: (App) => (props) =>
+          enhanceApp: (App:any) => (props:any) =>
             sheet.collectStyles(
               <CacheProvider value={cache}>
                 <App {...props} />

@@ -59,15 +59,15 @@ const MyCalendar: React.FC = () => {
   const [editMeetingDescription, setEditMeetingDescription] = useState<string>("");
   const [editMeetingLocation, setEditMeetingLocation] = useState<string>("");
 
-  // const handleEventDrop = (event:  EventInteractionArgs<object>) => {
-  //   console.log(event)
-  //   const { event: eventObject, start, end } = event;
-  //   const updatedEvent = eventObject as EventType;
-  //   // イベントの新しい開始日時と終了日時を設定
-  //   updatedEvent.start = start as Date;
-  //   updatedEvent.end = end as Date;
+   const handleEventDrop = (event:  EventInteractionArgs<object>) => {
+     console.log(event)
+     const { event: eventObject, start, end } = event;
+     const updatedEvent = eventObject as EventType;
+     // イベントの新しい開始日時と終了日時を設定
+     updatedEvent.start = start as Date;
+     updatedEvent.end = end as Date;
   
-  // };
+   };
   const handleSelectSlot = (slotInfo:SlotInfo) => {
     if(!slotInfo.box)return;
     setSelectSlot(slotInfo);
@@ -77,7 +77,8 @@ const MyCalendar: React.FC = () => {
     registerMeetingModal.onOpen();
     };
     // イベント押下時
-const handleSelectEvent = (event:EventType) => {
+const handleSelectEvent = (eventObject:object) => {
+  const event = eventObject as EventType;
   setEditMeetingId(event.id)
   setMeetingStartDate(event.start!)
   setMeetingEndDate(event.end!)
@@ -93,6 +94,7 @@ return(
     <CalendarWrap h={"100vh"} w={"100vw"} p={30}>
       <DnDCalendar
         localizer={localizer}
+        onEventDrop={handleEventDrop}
         draggableAccessor={(event) => true}
         style={{ height: "100%" }}
         events={events}

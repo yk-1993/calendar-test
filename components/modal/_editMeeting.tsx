@@ -29,8 +29,8 @@ return(
     </ModalHeader>
     <ModalBody>
         <Text>主催者： {user?.name}</Text>
-        <Text>開始時刻: {start?.toLocaleDateString("ja-jp", options)}</Text>
-        <Text>終了時刻: {end?.toLocaleDateString("ja-jp", options)}</Text>
+        <Text>開始時刻: {start?.toLocaleDateString("ja-jp")}</Text>
+        <Text>終了時刻: {end?.toLocaleDateString("ja-jp")}</Text>
         <Text>参加者: {guests?.map((guest)=> guest.name) || "なし"}</Text>
         <Text>場所: {location || "未設定"}</Text>
         <Text>説明: {description || "なし"}</Text>
