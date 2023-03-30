@@ -27,7 +27,8 @@ const RegisterMeeting:React.FC<RegisterMeetingProps> = (props) => {
     const { isOpen, onClose, clickPosition, events, setEvents, slotInfo,
             meetingStartDate, meetingEndDate, setMeetingStartDate, setMeetingEndDate } = props;
     const positonX = clickPosition && clickPosition?.x < 0 ? 10 : clickPosition?.x;
-    const positonY = clickPosition && clickPosition?.y < 0 ? 10 : clickPosition?.y;
+    const positonY = clickPosition && clickPosition?.y > 400 ? 400 : clickPosition?.y;
+    console.log(positonY)
     const [isFocused, setIsFocused] = useState(false);
     const [meetingTitle, setMeetingTitle] = useState<string>(''); 
     const [meetingLocation, setMeetingLocation] = useState<string>(''); 
