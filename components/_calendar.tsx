@@ -59,15 +59,15 @@ const MyCalendar: React.FC = () => {
   const [editMeetingDescription, setEditMeetingDescription] = useState<string>("");
   const [editMeetingLocation, setEditMeetingLocation] = useState<string>("");
 
-  const handleEventDrop = (event:  EventInteractionArgs<object>) => {
-    // console.log(event)
-    // const { event: eventObject, start, end } = event;
-    // const updatedEvent = eventObject as EventType;
-    // // イベントの新しい開始日時と終了日時を設定
-    // updatedEvent.start = start as Date;
-    // updatedEvent.end = end as Date;
+  // const handleEventDrop = (event:  EventInteractionArgs<object>) => {
+  //   console.log(event)
+  //   const { event: eventObject, start, end } = event;
+  //   const updatedEvent = eventObject as EventType;
+  //   // イベントの新しい開始日時と終了日時を設定
+  //   updatedEvent.start = start as Date;
+  //   updatedEvent.end = end as Date;
   
-  };
+  // };
   const handleSelectSlot = (slotInfo:SlotInfo) => {
     if(!slotInfo.box)return;
     setSelectSlot(slotInfo);
@@ -94,7 +94,6 @@ return(
       <DnDCalendar
         localizer={localizer}
         draggableAccessor={(event) => true}
-        onEventDrop={handleEventDrop}
         style={{ height: "100%" }}
         events={events}
         step={30} 
