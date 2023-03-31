@@ -123,7 +123,7 @@ return(
             toolbar
             formats={{
               dateFormat: "D",
-              dayFormat: "d",
+              dayFormat: "M月 D日 (ddd)",
               weekdayFormat: "ddd",
               dayHeaderFormat: "M月 D日 (ddd)",
               monthHeaderFormat: "YYYY年 M月"
