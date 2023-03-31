@@ -41,7 +41,7 @@ const RegisterMeeting:React.FC<RegisterMeetingProps> = (props) => {
     const handleChangeSelect = (selectedOptions: MultiValue<{ value: string; label: string }>) => {
         const updatedOptions = selectedOptions.map((option) => {
           const user = TMP_USER_LIST.find((user) => user.name === option.label);
-          return user ? user : { employeeId: 0, name: option.label };
+          return user ? user : { employeeId: 0, name: option.label, permissionLevel:0, };
         });
       
         if (selectedOptions) {
