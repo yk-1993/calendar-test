@@ -2,7 +2,9 @@ import { Modal, ModalContent, Button, ModalHeader, ModalCloseButton, ModalBody, 
 import { EventType } from '../../utils/constants';
 import type { DateTimeFormatOptions } from 'intl';
 
-type EditMeetingType = EventType & {
+type EditMeetingType = {
+    editEvent: EventType,
+    initEditEvent: () => void,
     isOpen: boolean;
     onClose: () => void;
 }
@@ -17,10 +19,15 @@ const options: DateTimeFormatOptions = {
   };
   
 const EditMeeting:React.FC<EditMeetingType> = (props) => {
-    const { isOpen, onClose, start, end, id, user, location, guests, description } = props;
+    const { isOpen, onClose, editEvent,initEditEvent } = props;
+
+    const onCloseEditEventModal = () => {
+        initEditEvent();
+        onClose();
+    }
 return(
 <>
-    <Modal isOpen={isOpen} onClose={onClose} isCentered size={"lg"}>
+    <Modal isOpen={isOpen} onClose={onCloseEditEventModal} isCentered size={"lg"}>
     <ModalContent>
     <ModalHeader
         borderRadius={".5rem .5rem 0rem 0 !important"}
@@ -30,17 +37,19 @@ return(
             <ModalCloseButton />
     </ModalHeader>
     <ModalBody>
-        <Text>主催者： {user?.name}</Text>
-        <Text>開始時刻: {start?.toLocaleDateString("ja-jp", options)}</Text>
-        <Text>終了時刻: {end?.toLocaleDateString("ja-jp", options)}</Text>
-        <Text>参加者: {guests?.map((guest)=> guest.name) || "なし"}</Text>
-        <Text>場所: {location || "未設定"}</Text>
-        <Text>説明: {description || "なし"}</Text>
+        <Text>主催者： {editEvent.user.name}</Text>
+        <Text>開始時刻: {editEvent.start?.toLocaleDateString("ja-jp", options)}</Text>
+        <Text>終了時刻: {editEvent.end?.toLocaleDateString("ja-jp", options)}</Text>
+        <Text>参加者: {editEvent.guests?.map((guest) => guest.name).join(", ") || "なし"}</Text>
+        <Text>場所: {editEvent.location || "未設定"}</Text>
+        <Text>説明: {editEvent.description || "なし"}</Text>
     </ModalBody>
-    
     <ModalFooter>
-        <Button colorScheme="gray" mr={3} onClick={onClose}>
+        <Button colorScheme="gray" mr={3} onClick={onCloseEditEventModal}>
             キャンセル
+        </Button>
+        <Button colorScheme="blue" mr={3}>
+            編集
         </Button>
     </ModalFooter>
     </ModalContent>

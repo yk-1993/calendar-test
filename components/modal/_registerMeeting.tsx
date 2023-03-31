@@ -1,5 +1,5 @@
-import { EventType, options, User } from '@/utils/constants';
-import { Box, Button, VStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, HStack, Flex, Text, Textarea, useToast } from '@chakra-ui/react';
+import { EventType, options, TMP_USER_LIST, User } from '@/utils/constants';
+import { Box, Button, VStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, Flex, Text, Textarea, useToast } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { SlotInfo } from 'react-big-calendar';
 import styled from 'styled-components';
@@ -9,6 +9,8 @@ import { IconContext } from 'react-icons';
 import { MdAccessTime, MdOutlinePeopleAlt,MdOutlineLocationOn,MdNotes } from "react-icons/md";
 import { MultiValue, Select } from 'chakra-react-select';
 import { v4 as uuidv4 } from 'uuid';
+import { loginUserState } from '../atom';
+import { useRecoilValue } from 'recoil';
 
 type RegisterMeetingProps = {
     isOpen: boolean;
@@ -28,28 +30,27 @@ const RegisterMeeting:React.FC<RegisterMeetingProps> = (props) => {
             meetingStartDate, meetingEndDate, setMeetingStartDate, setMeetingEndDate } = props;
     const positonX = clickPosition && clickPosition?.x < 0 ? 10 : clickPosition?.x;
     const positonY = clickPosition && clickPosition?.y > 400 ? 400 : clickPosition?.y;
-    console.log(positonY)
     const [isFocused, setIsFocused] = useState(false);
     const [meetingTitle, setMeetingTitle] = useState<string>(''); 
     const [meetingLocation, setMeetingLocation] = useState<string>(''); 
     const [meetingDescription, setMeetingDescription] = useState<string>(''); 
     const [meetingGuest, setMeetingGuest] = useState<Array<User>>([]); 
     const toast = useToast()
+    const loginUser = useRecoilValue(loginUserState);
 
-    // 参加者セレクトが変更時にステートを更新
-    const handleChangeSelect = (selectedOptions:MultiValue<{
-        value: string;
-        label: string;
-    }>) => {
-        const updatedOptions = selectedOptions.map((options)=>{
-            return { id:0,name: options.label }
-        })
+    const handleChangeSelect = (selectedOptions: MultiValue<{ value: string; label: string }>) => {
+        const updatedOptions = selectedOptions.map((option) => {
+          const user = TMP_USER_LIST.find((user) => user.name === option.label);
+          return user ? user : { employeeId: 0, name: option.label };
+        });
+      
         if (selectedOptions) {
           setMeetingGuest(updatedOptions);
         } else {
           setMeetingGuest([]);
         }
       };
+      
       const onSubmit = () => {
         // バリデーション
         const validationResult = validation();
@@ -65,7 +66,7 @@ const RegisterMeeting:React.FC<RegisterMeetingProps> = (props) => {
         }
         const addEvent: EventType = {
             id: uuidv4(),
-            user: { name:"テスト太郎1",id:10 },
+            user: loginUser,
             title:meetingTitle,
             start: meetingStartDate,
             end: meetingEndDate,
@@ -75,6 +76,13 @@ const RegisterMeeting:React.FC<RegisterMeetingProps> = (props) => {
         };
         const updatedEvent = [...events,addEvent];
         setEvents(updatedEvent);
+        toast({
+            title:`ミーティングを登録しました`,
+            duration:3000,
+            position:'top',
+            status: 'success',
+            isClosable:true
+        })
         onClose();
       }
 
