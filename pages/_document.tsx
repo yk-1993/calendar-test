@@ -1,25 +1,21 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
-import { CacheProvider } from "@emotion/react";
-import createEmotionServer from "@emotion/server/create-instance";
+import { extractCritical } from "@emotion/server";
 import createCache from "@emotion/cache";
 
+const cache = createCache({ key: "css" });
+cache.compat = true;
+
 export default class MyDocument extends Document {
-  static async getInitialProps(ctx:any) {
+  static async getInitialProps(ctx: any) {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
-    const cache = createCache({ key: "css" });
-    const { extractCritical } = createEmotionServer(cache);
 
     try {
       ctx.renderPage = () =>
         originalRenderPage({
-          enhanceApp: (App:any) => (props:any) =>
-            sheet.collectStyles(
-              <CacheProvider value={cache}>
-                <App {...props} />
-              </CacheProvider>
-            ),
+          enhanceApp: (App: any) => (props: any) =>
+            sheet.collectStyles(<App {...props} />),
         });
 
       const initialProps = await Document.getInitialProps(ctx);
